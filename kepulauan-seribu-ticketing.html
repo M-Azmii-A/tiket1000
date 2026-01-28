@@ -1,0 +1,1094 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SeribuSail - Ticketing Kapal Kepulauan Seribu</title>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --ocean-deep: #0a2463;
+            --ocean-medium: #1e5a99;
+            --ocean-light: #3e92cc;
+            --wave-foam: #d6ebf5;
+            --coral: #ff6b6b;
+            --sand: #ffeaa7;
+            --palm: #00b894;
+            --sunset: #fd79a8;
+            --white: #ffffff;
+            --text-dark: #2d3436;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            color: var(--text-dark);
+            overflow-x: hidden;
+            background: linear-gradient(180deg, var(--wave-foam) 0%, var(--white) 100%);
+        }
+
+        /* Animated Wave Background */
+        .wave-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.6;
+        }
+
+        .wave {
+            position: absolute;
+            width: 200%;
+            height: 100%;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none"><path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z" fill="%233e92cc" fill-opacity="0.2"/></svg>') repeat-x;
+            animation: wave 15s cubic-bezier(0.36, 0.45, 0.63, 0.53) infinite;
+        }
+
+        .wave:nth-of-type(2) {
+            bottom: 10px;
+            animation: wave 20s cubic-bezier(0.36, 0.45, 0.63, 0.53) -0.125s infinite, swell 7s ease -1.25s infinite;
+            opacity: 0.5;
+        }
+
+        @keyframes wave {
+            0% { transform: translateX(0); }
+            50% { transform: translateX(-25%); }
+            100% { transform: translateX(-50%); }
+        }
+
+        @keyframes swell {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, var(--ocean-deep) 0%, var(--ocean-medium) 100%);
+            padding: 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 20px rgba(10, 36, 99, 0.3);
+        }
+
+        nav {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 3rem;
+        }
+
+        .logo {
+            font-family: 'Oswald', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--white);
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            animation: slideInLeft 0.8s ease-out;
+        }
+
+        .logo::before {
+            content: '⚓';
+            font-size: 3rem;
+            animation: rotate 3s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            list-style: none;
+            animation: slideInRight 0.8s ease-out;
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .nav-links a {
+            color: var(--white);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: var(--coral);
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+        }
+
+        .nav-links a:hover::after {
+            width: 80%;
+        }
+
+        .nav-links a:hover {
+            color: var(--sand);
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 90vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(10, 36, 99, 0.8) 0%, rgba(62, 146, 204, 0.6) 100%),
+                        url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="%23ffffff" fill-opacity="0.1" d="M0,96L48,112C96,128,192,160,288,160C384,160,480,128,576,112C672,96,768,96,864,112C960,128,1056,160,1152,160C1248,160,1344,128,1392,112L1440,96L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"/></svg>');
+            background-size: cover;
+            background-position: center;
+        }
+
+        .hero-content {
+            max-width: 900px;
+            animation: fadeInUp 1s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero h1 {
+            font-family: 'Oswald', sans-serif;
+            font-size: 5rem;
+            font-weight: 700;
+            color: var(--white);
+            margin-bottom: 1.5rem;
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.3);
+            letter-spacing: 2px;
+            line-height: 1.1;
+        }
+
+        .hero p {
+            font-size: 1.4rem;
+            color: var(--wave-foam);
+            margin-bottom: 3rem;
+            font-weight: 300;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--coral) 0%, var(--sunset) 100%);
+            color: var(--white);
+            padding: 1.2rem 3rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(255, 107, 107, 0.4);
+            border: none;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(255, 107, 107, 0.6);
+        }
+
+        /* Section Styling */
+        section {
+            padding: 6rem 3rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        h2 {
+            font-family: 'Oswald', sans-serif;
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--ocean-deep);
+            text-align: center;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            position: relative;
+            display: inline-block;
+            width: 100%;
+        }
+
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--coral) 0%, var(--sunset) 100%);
+            border-radius: 2px;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            color: var(--ocean-medium);
+            font-size: 1.1rem;
+            margin-bottom: 4rem;
+            font-weight: 300;
+        }
+
+        /* Schedule Table */
+        .schedule-container {
+            overflow-x: auto;
+            background: var(--white);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            animation: fadeInUp 0.8s ease-out 0.2s both;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+        }
+
+        thead {
+            background: linear-gradient(135deg, var(--ocean-deep) 0%, var(--ocean-medium) 100%);
+        }
+
+        th {
+            padding: 1.5rem;
+            text-align: left;
+            font-weight: 600;
+            color: var(--white);
+            font-family: 'Oswald', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 1.1rem;
+        }
+
+        th:first-child {
+            border-radius: 15px 0 0 0;
+        }
+
+        th:last-child {
+            border-radius: 0 15px 0 0;
+        }
+
+        tbody tr {
+            background: var(--white);
+            transition: all 0.3s ease;
+        }
+
+        tbody tr:nth-child(even) {
+            background: var(--wave-foam);
+        }
+
+        tbody tr:hover {
+            background: linear-gradient(90deg, rgba(62, 146, 204, 0.1) 0%, rgba(214, 235, 245, 0.3) 100%);
+            transform: scale(1.01);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        td {
+            padding: 1.5rem;
+            border-bottom: 1px solid rgba(62, 146, 204, 0.1);
+        }
+
+        .btn-pesan {
+            background: linear-gradient(135deg, var(--palm) 0%, var(--ocean-light) 100%);
+            color: var(--white);
+            padding: 0.7rem 1.8rem;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.9rem;
+        }
+
+        .btn-pesan:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 184, 148, 0.4);
+        }
+
+        /* Booking Form */
+        .booking-form {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(214, 235, 245, 0.95) 100%);
+            padding: 3rem;
+            border-radius: 25px;
+            box-shadow: 0 15px 50px rgba(10, 36, 99, 0.15);
+            max-width: 800px;
+            margin: 0 auto;
+            animation: fadeInUp 0.8s ease-out 0.3s both;
+            backdrop-filter: blur(10px);
+        }
+
+        .form-group {
+            margin-bottom: 2rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.8rem;
+            color: var(--ocean-deep);
+            font-weight: 600;
+            font-family: 'Oswald', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.95rem;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 1rem 1.5rem;
+            border: 2px solid var(--ocean-light);
+            border-radius: 12px;
+            font-size: 1rem;
+            font-family: 'Poppins', sans-serif;
+            transition: all 0.3s ease;
+            background: var(--white);
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--coral);
+            box-shadow: 0 0 0 4px rgba(255, 107, 107, 0.1);
+            transform: translateY(-2px);
+        }
+
+        /* Services Grid */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2.5rem;
+            margin-top: 3rem;
+        }
+
+        .service-card {
+            background: var(--white);
+            padding: 2.5rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            animation: fadeInUp 0.8s ease-out both;
+        }
+
+        .service-card:nth-child(1) { animation-delay: 0.1s; }
+        .service-card:nth-child(2) { animation-delay: 0.2s; }
+        .service-card:nth-child(3) { animation-delay: 0.3s; }
+        .service-card:nth-child(4) { animation-delay: 0.4s; }
+        .service-card:nth-child(5) { animation-delay: 0.5s; }
+        .service-card:nth-child(6) { animation-delay: 0.6s; }
+
+        .service-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, var(--coral) 0%, var(--sunset) 100%);
+            transform: scaleX(0);
+            transition: transform 0.4s ease;
+        }
+
+        .service-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .service-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 50px rgba(10, 36, 99, 0.15);
+        }
+
+        .service-icon {
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+            display: block;
+        }
+
+        .service-card h3 {
+            font-family: 'Oswald', sans-serif;
+            font-size: 1.6rem;
+            color: var(--ocean-deep);
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .service-card p {
+            color: var(--text-dark);
+            line-height: 1.7;
+            font-weight: 300;
+        }
+
+        /* About Section */
+        .about-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+            animation: fadeInUp 0.8s ease-out 0.2s both;
+        }
+
+        .about-content h3 {
+            font-family: 'Oswald', sans-serif;
+            font-size: 2rem;
+            color: var(--ocean-deep);
+            margin-bottom: 1.5rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .about-content p {
+            line-height: 1.8;
+            color: var(--text-dark);
+            margin-bottom: 1.5rem;
+            font-weight: 300;
+        }
+
+        .about-image {
+            position: relative;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(10, 36, 99, 0.2);
+        }
+
+        .about-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s ease;
+        }
+
+        .about-image:hover img {
+            transform: scale(1.1);
+        }
+
+        /* Mission List */
+        .mission-list {
+            list-style: none;
+            margin-top: 2rem;
+        }
+
+        .mission-list li {
+            padding: 1rem 0;
+            padding-left: 2.5rem;
+            position: relative;
+            color: var(--text-dark);
+            font-weight: 300;
+            line-height: 1.6;
+        }
+
+        .mission-list li::before {
+            content: '🌊';
+            position: absolute;
+            left: 0;
+            font-size: 1.5rem;
+        }
+
+        /* Contact Section */
+        .contact-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            margin-top: 3rem;
+            animation: fadeInUp 0.8s ease-out 0.2s both;
+        }
+
+        .contact-info {
+            background: linear-gradient(135deg, var(--ocean-deep) 0%, var(--ocean-medium) 100%);
+            padding: 3rem;
+            border-radius: 20px;
+            color: var(--white);
+        }
+
+        .contact-item {
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 1.5rem;
+        }
+
+        .contact-icon {
+            font-size: 2rem;
+            min-width: 50px;
+        }
+
+        .contact-item h4 {
+            font-family: 'Oswald', sans-serif;
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .contact-form-container {
+            background: var(--white);
+            padding: 3rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        textarea {
+            width: 100%;
+            padding: 1rem 1.5rem;
+            border: 2px solid var(--ocean-light);
+            border-radius: 12px;
+            font-size: 1rem;
+            font-family: 'Poppins', sans-serif;
+            transition: all 0.3s ease;
+            min-height: 150px;
+            resize: vertical;
+            background: var(--white);
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: var(--coral);
+            box-shadow: 0 0 0 4px rgba(255, 107, 107, 0.1);
+        }
+
+        /* Footer */
+        footer {
+            background: linear-gradient(135deg, var(--ocean-deep) 0%, #051836 100%);
+            color: var(--white);
+            padding: 3rem 3rem 1.5rem;
+            text-align: center;
+        }
+
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .footer-links a {
+            color: var(--wave-foam);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--coral);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .social-links a {
+            color: var(--white);
+            font-size: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .social-links a:hover {
+            color: var(--coral);
+            transform: translateY(-3px);
+        }
+
+        .copyright {
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            font-weight: 300;
+            color: var(--wave-foam);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            nav {
+                flex-direction: column;
+                gap: 1.5rem;
+                padding: 1.5rem 2rem;
+            }
+
+            .nav-links {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+
+            .hero h1 {
+                font-size: 3rem;
+            }
+
+            .hero p {
+                font-size: 1.1rem;
+            }
+
+            h2 {
+                font-size: 2rem;
+            }
+
+            .about-container,
+            .contact-container {
+                grid-template-columns: 1fr;
+            }
+
+            .services-grid {
+                grid-template-columns: 1fr;
+            }
+
+            section {
+                padding: 4rem 1.5rem;
+            }
+
+            .footer-content {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            table {
+                font-size: 0.85rem;
+            }
+
+            th, td {
+                padding: 1rem 0.5rem;
+            }
+        }
+
+        /* Scroll Animation */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <div class="wave-background">
+        <div class="wave"></div>
+        <div class="wave"></div>
+    </div>
+
+    <header>
+        <nav>
+            <div class="logo">SeribuSail</div>
+            <ul class="nav-links">
+                <li><a href="#jadwal">Jadwal</a></li>
+                <li><a href="#pemesanan">Pesan Tiket</a></li>
+                <li><a href="#layanan">Layanan</a></li>
+                <li><a href="#tentang">Tentang</a></li>
+                <li><a href="#kontak">Kontak</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Jelajahi Kepulauan Seribu</h1>
+            <p>Pengalaman berlayar terbaik menuju surga tropis Jakarta. Nyaman, aman, dan tepat waktu.</p>
+            <a href="#pemesanan" class="cta-button">Pesan Tiket Sekarang</a>
+        </div>
+    </section>
+
+    <section id="jadwal">
+        <h2>Jadwal Keberangkatan</h2>
+        <p class="section-subtitle">Lihat jadwal kapal terbaru menuju berbagai pulau di Kepulauan Seribu</p>
+        
+        <div class="schedule-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Pelabuhan</th>
+                        <th>Tujuan</th>
+                        <th>Keberangkatan</th>
+                        <th>Durasi</th>
+                        <th>Harga</th>
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
+                <tbody id="schedule-body">
+                    <tr>
+                        <td>Marina Ancol</td>
+                        <td>Pulau Tidung</td>
+                        <td>08:00 WIB</td>
+                        <td>2.5 Jam</td>
+                        <td>Rp 150.000</td>
+                        <td><button class="btn-pesan" onclick="pesanTiket('Pulau Tidung', '08:00')">Pesan</button></td>
+                    </tr>
+                    <tr>
+                        <td>Marina Ancol</td>
+                        <td>Pulau Pramuka</td>
+                        <td>09:00 WIB</td>
+                        <td>2 Jam</td>
+                        <td>Rp 130.000</td>
+                        <td><button class="btn-pesan" onclick="pesanTiket('Pulau Pramuka', '09:00')">Pesan</button></td>
+                    </tr>
+                    <tr>
+                        <td>Marina Ancol</td>
+                        <td>Pulau Harapan</td>
+                        <td>10:00 WIB</td>
+                        <td>2.5 Jam</td>
+                        <td>Rp 140.000</td>
+                        <td><button class="btn-pesan" onclick="pesanTiket('Pulau Harapan', '10:00')">Pesan</button></td>
+                    </tr>
+                    <tr>
+                        <td>Marina Ancol</td>
+                        <td>Pulau Pari</td>
+                        <td>11:00 WIB</td>
+                        <td>1.5 Jam</td>
+                        <td>Rp 120.000</td>
+                        <td><button class="btn-pesan" onclick="pesanTiket('Pulau Pari', '11:00')">Pesan</button></td>
+                    </tr>
+                    <tr>
+                        <td>Marina Ancol</td>
+                        <td>Pulau Untung Jawa</td>
+                        <td>12:00 WIB</td>
+                        <td>1 Jam</td>
+                        <td>Rp 100.000</td>
+                        <td><button class="btn-pesan" onclick="pesanTiket('Pulau Untung Jawa', '12:00')">Pesan</button></td>
+                    </tr>
+                    <tr>
+                        <td>Marina Ancol</td>
+                        <td>Pulau Kelapa</td>
+                        <td>13:00 WIB</td>
+                        <td>3 Jam</td>
+                        <td>Rp 160.000</td>
+                        <td><button class="btn-pesan" onclick="pesanTiket('Pulau Kelapa', '13:00')">Pesan</button></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <section id="pemesanan">
+        <h2>Pemesanan Tiket</h2>
+        <p class="section-subtitle">Pesan tiket kapal Anda dengan mudah dan dapatkan konfirmasi instan</p>
+        
+        <div class="booking-form">
+            <form id="booking-form" onsubmit="submitBooking(event)">
+                <div class="form-group">
+                    <label for="nama">Nama Lengkap</label>
+                    <input type="text" id="nama" name="nama" required placeholder="Masukkan nama lengkap Anda">
+                </div>
+                
+                <div class="form-group">
+                    <label for="tujuan">Tujuan Pulau</label>
+                    <select id="tujuan" name="tujuan" required>
+                        <option value="">Pilih Tujuan</option>
+                        <option value="Pulau Tidung">Pulau Tidung</option>
+                        <option value="Pulau Pramuka">Pulau Pramuka</option>
+                        <option value="Pulau Harapan">Pulau Harapan</option>
+                        <option value="Pulau Pari">Pulau Pari</option>
+                        <option value="Pulau Untung Jawa">Pulau Untung Jawa</option>
+                        <option value="Pulau Kelapa">Pulau Kelapa</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="tanggal">Tanggal Keberangkatan</label>
+                    <input type="date" id="tanggal" name="tanggal" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="waktu">Waktu Keberangkatan</label>
+                    <select id="waktu" name="waktu" required>
+                        <option value="">Pilih Waktu</option>
+                        <option value="08:00">08:00 WIB</option>
+                        <option value="09:00">09:00 WIB</option>
+                        <option value="10:00">10:00 WIB</option>
+                        <option value="11:00">11:00 WIB</option>
+                        <option value="12:00">12:00 WIB</option>
+                        <option value="13:00">13:00 WIB</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="jumlah">Jumlah Penumpang</label>
+                    <input type="number" id="jumlah" name="jumlah" min="1" max="10" value="1" required>
+                </div>
+                
+                <button type="submit" class="cta-button" style="width: 100%;">Pesan Sekarang</button>
+            </form>
+        </div>
+    </section>
+
+    <section id="layanan">
+        <h2>Layanan Kami</h2>
+        <p class="section-subtitle">Nikmati berbagai fasilitas terbaik untuk pengalaman perjalanan yang tak terlupakan</p>
+        
+        <div class="services-grid">
+            <div class="service-card">
+                <span class="service-icon">🚢</span>
+                <h3>Kapal Modern</h3>
+                <p>Armada kapal yang terawat dengan baik, dilengkapi sistem keselamatan internasional dan interior nyaman untuk perjalanan Anda.</p>
+            </div>
+            
+            <div class="service-card">
+                <span class="service-icon">🎫</span>
+                <h3>Booking Online</h3>
+                <p>Pesan tiket kapan saja, di mana saja melalui platform digital kami yang mudah digunakan. Tanpa antri, langsung konfirmasi.</p>
+            </div>
+            
+            <div class="service-card">
+                <span class="service-icon">💳</span>
+                <h3>Pembayaran Mudah</h3>
+                <p>Berbagai metode pembayaran tersedia: transfer bank, e-wallet, kartu kredit, dan QRIS untuk kemudahan transaksi Anda.</p>
+            </div>
+            
+            <div class="service-card">
+                <span class="service-icon">🏝️</span>
+                <h3>Paket Wisata</h3>
+                <p>Paket tour lengkap dengan penginapan, makan, snorkeling, dan aktivitas menarik lainnya di berbagai pulau eksotis.</p>
+            </div>
+            
+            <div class="service-card">
+                <span class="service-icon">🛡️</span>
+                <h3>Asuransi Perjalanan</h3>
+                <p>Perlindungan lengkap selama perjalanan dengan asuransi yang mencakup kecelakaan, kesehatan, dan kehilangan barang bawaan.</p>
+            </div>
+            
+            <div class="service-card">
+                <span class="service-icon">📞</span>
+                <h3>Support 24/7</h3>
+                <p>Tim customer service kami siap membantu Anda 24 jam sehari, 7 hari seminggu melalui telepon, WhatsApp, atau chat online.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="tentang">
+        <h2>Tentang SeribuSail</h2>
+        <p class="section-subtitle">Mitra terpercaya untuk petualangan maritim Anda</p>
+        
+        <div class="about-container">
+            <div class="about-content">
+                <h3>Visi Kami</h3>
+                <p>Menjadi operator transportasi laut terdepan yang menghubungkan Jakarta dengan keindahan Kepulauan Seribu, memberikan pengalaman perjalanan yang aman, nyaman, dan berkesan bagi setiap penumpang.</p>
+                
+                <h3>Misi Kami</h3>
+                <ul class="mission-list">
+                    <li>Menyediakan layanan transportasi laut yang tepat waktu, aman, dan berkualitas tinggi</li>
+                    <li>Menghadirkan pengalaman pelanggan terbaik melalui teknologi booking modern dan layanan profesional</li>
+                    <li>Mendukung pariwisata berkelanjutan di Kepulauan Seribu dengan praktik ramah lingkungan</li>
+                    <li>Berkomitmen pada keselamatan penumpang dan awak kapal sebagai prioritas utama</li>
+                </ul>
+            </div>
+            
+            <div class="about-image">
+                <img src="https://images.unsplash.com/photo-1559827260-dc66d52bef19?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Kepulauan Seribu">
+            </div>
+        </div>
+    </section>
+
+    <section id="kontak">
+        <h2>Hubungi Kami</h2>
+        <p class="section-subtitle">Ada pertanyaan? Tim kami siap membantu Anda</p>
+        
+        <div class="contact-container">
+            <div class="contact-info">
+                <div class="contact-item">
+                    <span class="contact-icon">📧</span>
+                    <div>
+                        <h4>Email</h4>
+                        <p>info@seribusail.com</p>
+                        <p>booking@seribusail.com</p>
+                    </div>
+                </div>
+                
+                <div class="contact-item">
+                    <span class="contact-icon">📱</span>
+                    <div>
+                        <h4>Telepon</h4>
+                        <p>+62 21 5555 1000</p>
+                        <p>WhatsApp: +62 812 8888 9999</p>
+                    </div>
+                </div>
+                
+                <div class="contact-item">
+                    <span class="contact-icon">📍</span>
+                    <div>
+                        <h4>Alamat</h4>
+                        <p>Marina Ancol, Dermaga 17</p>
+                        <p>Jakarta Utara, DKI Jakarta 14430</p>
+                    </div>
+                </div>
+                
+                <div class="contact-item">
+                    <span class="contact-icon">🕐</span>
+                    <div>
+                        <h4>Jam Operasional</h4>
+                        <p>Senin - Minggu: 07:00 - 18:00 WIB</p>
+                        <p>Customer Service 24/7</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="contact-form-container">
+                <form id="contact-form" onsubmit="submitContact(event)">
+                    <div class="form-group">
+                        <label for="contact-nama">Nama Lengkap</label>
+                        <input type="text" id="contact-nama" name="nama" required placeholder="Nama Anda">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="contact-email">Email</label>
+                        <input type="email" id="contact-email" name="email" required placeholder="email@example.com">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="pesan">Pesan</label>
+                        <textarea id="pesan" name="pesan" required placeholder="Tulis pesan Anda di sini..."></textarea>
+                    </div>
+                    
+                    <button type="submit" class="cta-button" style="width: 100%;">Kirim Pesan</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-content">
+            <div class="logo">SeribuSail</div>
+            <ul class="footer-links">
+                <li><a href="#tentang">Tentang Kami</a></li>
+                <li><a href="#layanan">Layanan</a></li>
+                <li><a href="#kontak">Kontak</a></li>
+                <li><a href="#">Syarat & Ketentuan</a></li>
+                <li><a href="#">Kebijakan Privasi</a></li>
+            </ul>
+            <div class="social-links">
+                <a href="#" aria-label="Facebook">📘</a>
+                <a href="#" aria-label="Instagram">📷</a>
+                <a href="#" aria-label="Twitter">🐦</a>
+                <a href="#" aria-label="YouTube">📺</a>
+            </div>
+        </div>
+        <div class="copyright">
+            <p>&copy; 2026 SeribuSail. Semua hak dilindungi. | Operator resmi transportasi maritim Kepulauan Seribu</p>
+        </div>
+    </footer>
+
+    <script>
+        // Set minimum date to today
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById('tanggal').setAttribute('min', today);
+
+        // Booking form submission
+        function submitBooking(e) {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const data = Object.fromEntries(formData);
+            
+            alert(`Terima kasih ${data.nama}!\n\nPemesanan tiket Anda telah diterima:\n\nTujuan: ${data.tujuan}\nTanggal: ${data.tanggal}\nWaktu: ${data.waktu}\nJumlah Penumpang: ${data.jumlah}\n\nKami akan mengirimkan konfirmasi melalui email.`);
+            
+            e.target.reset();
+        }
+
+        // Contact form submission
+        function submitContact(e) {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const data = Object.fromEntries(formData);
+            
+            alert(`Terima kasih ${data.nama}!\n\nPesan Anda telah terkirim. Tim kami akan segera menghubungi Anda melalui ${data.email}.`);
+            
+            e.target.reset();
+        }
+
+        // Quick booking from schedule table
+        function pesanTiket(tujuan, waktu) {
+            document.getElementById('tujuan').value = tujuan;
+            document.getElementById('waktu').value = waktu;
+            document.getElementById('pemesanan').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Smooth scroll for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        // Scroll animation
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+    </script>
+</body>
+</html>
