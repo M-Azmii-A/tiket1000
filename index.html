@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
@@ -833,6 +834,11 @@
                 </div>
                 
                 <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" required placeholder="email@example.com">
+                </div>
+                
+                <div class="form-group">
                     <label for="tujuan">Tujuan Pulau</label>
                     <select id="tujuan" name="tujuan" required>
                         <option value="">Pilih Tujuan</option>
@@ -866,6 +872,41 @@
                 <div class="form-group">
                     <label for="jumlah">Jumlah Penumpang</label>
                     <input type="number" id="jumlah" name="jumlah" min="1" max="10" value="1" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="pembayaran">Metode Pembayaran</label>
+                    <select id="pembayaran" name="pembayaran" required onchange="updatePaymentInfo()">
+                        <option value="">Pilih Metode Pembayaran</option>
+                        <optgroup label="Transfer Bank">
+                            <option value="BCA">BCA - Bank Central Asia</option>
+                            <option value="Mandiri">Mandiri</option>
+                            <option value="BNI">BNI - Bank Negara Indonesia</option>
+                            <option value="BRI">BRI - Bank Rakyat Indonesia</option>
+                        </optgroup>
+                        <optgroup label="E-Wallet">
+                            <option value="GoPay">GoPay</option>
+                            <option value="OVO">OVO</option>
+                            <option value="Dana">DANA</option>
+                            <option value="ShopeePay">ShopeePay</option>
+                            <option value="LinkAja">LinkAja</option>
+                        </optgroup>
+                        <optgroup label="Kartu Kredit/Debit">
+                            <option value="Visa">Visa</option>
+                            <option value="Mastercard">Mastercard</option>
+                            <option value="JCB">JCB</option>
+                        </optgroup>
+                        <optgroup label="Lainnya">
+                            <option value="QRIS">QRIS (Semua E-Wallet)</option>
+                            <option value="Indomaret">Indomaret</option>
+                            <option value="Alfamart">Alfamart</option>
+                        </optgroup>
+                    </select>
+                </div>
+
+                <div id="payment-info" style="display: none; margin-top: 1rem; padding: 1.5rem; background: linear-gradient(135deg, rgba(62, 146, 204, 0.1) 0%, rgba(214, 235, 245, 0.3) 100%); border-radius: 12px; border-left: 4px solid var(--ocean-light);">
+                    <p style="margin: 0; color: var(--ocean-deep); font-weight: 500; font-size: 0.95rem;"><strong>ℹ️ Info Pembayaran:</strong></p>
+                    <p id="payment-details" style="margin: 0.5rem 0 0 0; color: var(--text-dark); font-size: 0.9rem; line-height: 1.6;"></p>
                 </div>
                 
                 <button type="submit" class="cta-button" style="width: 100%;">Pesan Sekarang</button>
@@ -917,7 +958,7 @@
     </section>
 
     <section id="tentang">
-        <h2>Tentang SeribuSail</h2>
+        <h2>Tentang Tiket1000</h2>
         <p class="section-subtitle">Mitra terpercaya untuk petualangan maritim Anda</p>
         
         <div class="about-container">
@@ -950,8 +991,8 @@
                     <span class="contact-icon">📧</span>
                     <div>
                         <h4>Email</h4>
-                        <p>info@seribusail.com</p>
-                        <p>booking@seribusail.com</p>
+                        <p><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="1871767e77586b7d6a717a6d6b797174367b7775">[email&#160;protected]</a></p>
+                        <p><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="4d2f22222624232a0d3e283f242f383e2c2421632e2220">[email&#160;protected]</a></p>
                     </div>
                 </div>
                 
@@ -1008,7 +1049,7 @@
 
     <footer>
         <div class="footer-content">
-            <div class="logo">SeribuSail</div>
+            <div class="logo">Tiket1000</div>
             <ul class="footer-links">
                 <li><a href="#tentang">Tentang Kami</a></li>
                 <li><a href="#layanan">Layanan</a></li>
@@ -1024,14 +1065,46 @@
             </div>
         </div>
         <div class="copyright">
-            <p>&copy; 2026 SeribuSail. Semua hak dilindungi. | Operator resmi transportasi maritim Kepulauan Seribu</p>
+            <p>&copy; 2026 Tiket1000. Semua hak dilindungi. | Operator resmi transportasi maritim Kepulauan Seribu</p>
         </div>
     </footer>
 
-    <script>
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
         // Set minimum date to today
         const today = new Date().toISOString().split('T')[0];
         document.getElementById('tanggal').setAttribute('min', today);
+
+        // Payment information
+        const paymentInfo = {
+            'BCA': 'Transfer ke rekening BCA: 1234567890 a.n. PT Tiket1000 Indonesia. Konfirmasi otomatis setelah pembayaran terverifikasi (max 1 jam).',
+            'Mandiri': 'Transfer ke rekening Mandiri: 0987654321 a.n. PT Tiket1000 Indonesia. Konfirmasi otomatis setelah pembayaran terverifikasi (max 1 jam).',
+            'BNI': 'Transfer ke rekening BNI: 1122334455 a.n. PT Tiket1000 Indonesia. Konfirmasi otomatis setelah pembayaran terverifikasi (max 1 jam).',
+            'BRI': 'Transfer ke rekening BRI: 5566778899 a.n. PT Tiket1000 Indonesia. Konfirmasi otomatis setelah pembayaran terverifikasi (max 1 jam).',
+            'GoPay': 'Scan QR Code GoPay yang akan dikirim via email. Pembayaran terverifikasi secara instant.',
+            'OVO': 'Scan QR Code OVO yang akan dikirim via email. Pembayaran terverifikasi secara instant.',
+            'Dana': 'Scan QR Code DANA yang akan dikirim via email. Pembayaran terverifikasi secara instant.',
+            'ShopeePay': 'Scan QR Code ShopeePay yang akan dikirim via email. Pembayaran terverifikasi secara instant.',
+            'LinkAja': 'Scan QR Code LinkAja yang akan dikirim via email. Pembayaran terverifikasi secara instant.',
+            'Visa': 'Anda akan diarahkan ke halaman pembayaran aman untuk memasukkan detail kartu Visa Anda.',
+            'Mastercard': 'Anda akan diarahkan ke halaman pembayaran aman untuk memasukkan detail kartu Mastercard Anda.',
+            'JCB': 'Anda akan diarahkan ke halaman pembayaran aman untuk memasukkan detail kartu JCB Anda.',
+            'QRIS': 'Scan QR Code QRIS yang dapat dibayar melalui semua aplikasi e-wallet. Pembayaran terverifikasi instant.',
+            'Indomaret': 'Kode pembayaran akan dikirim via email. Bayar di kasir Indomaret terdekat dalam 24 jam.',
+            'Alfamart': 'Kode pembayaran akan dikirim via email. Bayar di kasir Alfamart terdekat dalam 24 jam.'
+        };
+
+        function updatePaymentInfo() {
+            const pembayaran = document.getElementById('pembayaran').value;
+            const infoDiv = document.getElementById('payment-info');
+            const detailsP = document.getElementById('payment-details');
+            
+            if (pembayaran && paymentInfo[pembayaran]) {
+                detailsP.textContent = paymentInfo[pembayaran];
+                infoDiv.style.display = 'block';
+            } else {
+                infoDiv.style.display = 'none';
+            }
+        }
 
         // Booking form submission
         function submitBooking(e) {
@@ -1039,9 +1112,10 @@
             const formData = new FormData(e.target);
             const data = Object.fromEntries(formData);
             
-            alert(`Terima kasih ${data.nama}!\n\nPemesanan tiket Anda telah diterima:\n\nTujuan: ${data.tujuan}\nTanggal: ${data.tanggal}\nWaktu: ${data.waktu}\nJumlah Penumpang: ${data.jumlah}\n\nKami akan mengirimkan konfirmasi melalui email.`);
+            alert(`Terima kasih ${data.nama}!\n\nPemesanan tiket Anda telah diterima:\n\nTujuan: ${data.tujuan}\nTanggal: ${data.tanggal}\nWaktu: ${data.waktu}\nJumlah Penumpang: ${data.jumlah}\nMetode Pembayaran: ${data.pembayaran}\n\nE-Tiket dan instruksi pembayaran akan dikirimkan ke:\n${data.email}\n\nSilakan cek email Anda dalam 5-10 menit dan selesaikan pembayaran sesuai instruksi.`);
             
             e.target.reset();
+            document.getElementById('payment-info').style.display = 'none';
         }
 
         // Contact form submission
