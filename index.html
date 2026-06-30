@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tiket1000 - Ticketing Kapal Kepulauan Seribu</title>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="auth.css">
+    <link rel="stylesheet" href="features.css">
+</head>
+<body>
+    <div class="wave-background">
+        <div class="wave"></div>
+        <div class="wave"></div>
+    </div>
+
+    <header>
+        <nav>
+            <div class="logo">Tiket1000</div>
+            <ul class="nav-links">
+                <li><a href="#jadwal">Jadwal</a></li>
+                <li><a href="#" onclick="openModal(); return false;">Pesan Tiket</a></li>
+                <li><a href="#layanan">Layanan</a></li>
+                <li><a href="#tentang">Tentang</a></li>
+                <li><a href="#kontak">Kontak</a></li>
+            </ul>
+            <div class="nav-auth" id="nav-auth">
+                <a href="login.html" class="btn-login">&#128274; Masuk</a>
+            </div>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Jelajahi Kepulauan Seribu</h1>
+            <p>Pengalaman berlayar terbaik menuju surga tropis Jakarta. Nyaman, aman, dan tepat waktu.</p>
+            <a href="#" class="cta-button" onclick="openModal(); return false;">Pesan Tiket Sekarang</a>
+        </div>
+    </section>
+
+    <section id="jadwal">
+        <h2>Jadwal Keberangkatan</h2>
+        <p class="section-subtitle">Lihat jadwal kapal terbaru menuju berbagai pulau di Kepulauan Seribu</p>
+        <div class="schedule-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Pelabuhan Asal</th><th>Tujuan</th><th>Keberangkatan</th><th>Durasi</th><th>Harga</th><th>Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>Marina Ancol</td><td>Pulau Tidung</td><td>08:00 WIB</td><td>2.5 Jam</td><td>Rp 150.000</td><td><button class="btn-pesan" onclick="pesanTiket('Pulau Tidung','08:00','Marina Ancol')">Pesan</button></td></tr>
+                    <tr><td>Marina Ancol</td><td>Pulau Pramuka</td><td>09:00 WIB</td><td>2 Jam</td><td>Rp 130.000</td><td><button class="btn-pesan" onclick="pesanTiket('Pulau Pramuka','09:00','Marina Ancol')">Pesan</button></td></tr>
+                    <tr><td>Marina Ancol</td><td>Pulau Harapan</td><td>10:00 WIB</td><td>2.5 Jam</td><td>Rp 140.000</td><td><button class="btn-pesan" onclick="pesanTiket('Pulau Harapan','10:00','Marina Ancol')">Pesan</button></td></tr>
+                    <tr><td>Marina Ancol</td><td>Pulau Pari</td><td>11:00 WIB</td><td>1.5 Jam</td><td>Rp 120.000</td><td><button class="btn-pesan" onclick="pesanTiket('Pulau Pari','11:00','Marina Ancol')">Pesan</button></td></tr>
+                    <tr><td>Marina Ancol</td><td>Pulau Untung Jawa</td><td>12:00 WIB</td><td>1 Jam</td><td>Rp 100.000</td><td><button class="btn-pesan" onclick="pesanTiket('Pulau Untung Jawa','12:00','Marina Ancol')">Pesan</button></td></tr>
+                    <tr><td>Marina Ancol</td><td>Pulau Kelapa</td><td>13:00 WIB</td><td>3 Jam</td><td>Rp 160.000</td><td><button class="btn-pesan" onclick="pesanTiket('Pulau Kelapa','13:00','Marina Ancol')">Pesan</button></td></tr>
+                    <tr><td>Muara Angke</td><td>Pulau Pramuka</td><td>07:00 WIB</td><td>2 Jam</td><td>Rp 65.000</td><td><button class="btn-pesan" onclick="pesanTiket('Pulau Pramuka','07:00','Muara Angke')">Pesan</button></td></tr>
+                    <tr><td>Muara Angke</td><td>Pulau Kelapa</td><td>08:30 WIB</td><td>3 Jam</td><td>Rp 75.000</td><td><button class="btn-pesan" onclick="pesanTiket('Pulau Kelapa','08:30','Muara Angke')">Pesan</button></td></tr>
+                    <tr><td>Muara Angke</td><td>Pulau Harapan</td><td>09:30 WIB</td><td>2.5 Jam</td><td>Rp 70.000</td><td><button class="btn-pesan" onclick="pesanTiket('Pulau Harapan','09:30','Muara Angke')">Pesan</button></td></tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <section id="layanan">
+        <h2>Layanan Kami</h2>
+        <p class="section-subtitle">Nikmati berbagai fasilitas terbaik untuk pengalaman perjalanan yang tak terlupakan</p>
+        <div class="services-grid">
+            <div class="service-card"><span class="service-icon">&#128674;</span><h3>Kapal Modern</h3><p>Armada kapal yang terawat dengan baik, dilengkapi sistem keselamatan internasional dan interior nyaman untuk perjalanan Anda.</p></div>
+            <div class="service-card"><span class="service-icon">&#127915;</span><h3>Booking Online</h3><p>Pesan tiket kapan saja, di mana saja melalui platform digital kami yang mudah digunakan. Tanpa antri, langsung konfirmasi.</p></div>
+            <div class="service-card"><span class="service-icon">&#128179;</span><h3>Pembayaran Mudah</h3><p>Berbagai metode pembayaran tersedia: transfer bank, e-wallet, kartu kredit, dan QRIS untuk kemudahan transaksi Anda.</p></div>
+            <div class="service-card"><span class="service-icon">&#127965;</span><h3>Paket Wisata</h3><p>Paket tour lengkap dengan penginapan, makan, snorkeling, dan aktivitas menarik lainnya di berbagai pulau eksotis.</p></div>
+            <div class="service-card"><span class="service-icon">&#128737;</span><h3>Asuransi Perjalanan</h3><p>Perlindungan lengkap selama perjalanan dengan asuransi yang mencakup kecelakaan, kesehatan, dan kehilangan barang bawaan.</p></div>
+            <div class="service-card"><span class="service-icon">&#128222;</span><h3>Support 24/7</h3><p>Tim customer service kami siap membantu Anda 24 jam sehari, 7 hari seminggu melalui telepon, WhatsApp, atau chat online.</p></div>
+        </div>
+    </section>
+
+    <section id="tentang">
+        <h2>Tentang Tiket1000</h2>
+        <p class="section-subtitle">Mitra terpercaya untuk petualangan maritim Anda</p>
+        <div class="about-container">
+            <div class="about-content">
+                <h3>Visi Kami</h3>
+                <p>Menjadi operator transportasi laut terdepan yang menghubungkan Jakarta dengan keindahan Kepulauan Seribu, memberikan pengalaman perjalanan yang aman, nyaman, dan berkesan bagi setiap penumpang.</p>
+                <h3>Misi Kami</h3>
+                <ul class="mission-list">
+                    <li>Menyediakan layanan transportasi laut yang tepat waktu, aman, dan berkualitas tinggi</li>
+                    <li>Menghadirkan pengalaman pelanggan terbaik melalui teknologi booking modern dan layanan profesional</li>
+                    <li>Mendukung pariwisata berkelanjutan di Kepulauan Seribu dengan praktik ramah lingkungan</li>
+                    <li>Berkomitmen pada keselamatan penumpang dan awak kapal sebagai prioritas utama</li>
+                </ul>
+            </div>
+            <div class="about-image">
+                <img src="https://images.unsplash.com/photo-1559827260-dc66d52bef19?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Kepulauan Seribu">
+            </div>
+        </div>
+    </section>
+
+    <section id="kontak">
+        <h2>Hubungi Kami</h2>
+        <p class="section-subtitle">Ada pertanyaan? Tim kami siap membantu Anda</p>
+        <div class="contact-container">
+            <div class="contact-info">
+                <div class="contact-item"><span class="contact-icon">&#128231;</span><div><h4>Email</h4><p>info@tiket1000.id</p><p>support@tiket1000.id</p></div></div>
+                <div class="contact-item"><span class="contact-icon">&#128241;</span><div><h4>Telepon</h4><p>+62 21 5555 1000</p><p>WhatsApp: +62 812 8888 9999</p></div></div>
+                <div class="contact-item"><span class="contact-icon">&#128205;</span><div><h4>Alamat</h4><p>Marina Ancol, Dermaga 17</p><p>Jakarta Utara, DKI Jakarta 14430</p></div></div>
+                <div class="contact-item"><span class="contact-icon">&#128336;</span><div><h4>Jam Operasional</h4><p>Senin - Minggu: 07:00 - 18:00 WIB</p><p>Customer Service 24/7</p></div></div>
+            </div>
+            <div class="contact-form-container">
+                <form id="contact-form" onsubmit="submitContact(event)">
+                    <div class="form-group"><label class="auth-label" for="contact-nama">Nama Lengkap</label><input type="text" id="contact-nama" name="nama" required placeholder="Nama Anda"></div>
+                    <div class="form-group"><label class="auth-label" for="contact-email">Email</label><input type="email" id="contact-email" name="email" required placeholder="email@example.com"></div>
+                    <div class="form-group"><label class="auth-label" for="pesan">Pesan</label><textarea id="pesan" name="pesan" required placeholder="Tulis pesan Anda di sini..."></textarea></div>
+                    <button type="submit" class="cta-button" style="width:100%;">Kirim Pesan</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-content">
+            <div class="logo">Tiket1000</div>
+            <ul class="footer-links">
+                <li><a href="#tentang">Tentang Kami</a></li>
+                <li><a href="#layanan">Layanan</a></li>
+                <li><a href="#kontak">Kontak</a></li>
+                <li><a href="#">Syarat &amp; Ketentuan</a></li>
+                <li><a href="#">Kebijakan Privasi</a></li>
+            </ul>
+            <div class="social-links">
+                <a href="#" aria-label="Facebook">&#128216;</a>
+                <a href="#" aria-label="Instagram">&#128247;</a>
+                <a href="#" aria-label="Twitter">&#128038;</a>
+                <a href="#" aria-label="YouTube">&#128250;</a>
+            </div>
+        </div>
+        <div class="copyright">
+            <p>&copy; 2026 Tiket1000. Semua hak dilindungi. | Operator resmi transportasi maritim Kepulauan Seribu</p>
+        </div>
+    </footer>
+
+    <!-- MODAL POPUP PEMESANAN TIKET -->
+    <div id="booking-modal" class="modal-overlay" onclick="closeModalOnOverlay(event)">
+        <div class="modal-container" style="max-width:780px;">
+            <button class="modal-close" onclick="closeModal()" aria-label="Tutup">&times;</button>
+            <div class="modal-header">
+                <div class="modal-icon-wrap">&#9875;</div>
+                <h3>Pemesanan Tiket</h3>
+                <p id="modal-subtitle">Isi data diri dan pilih jadwal perjalanan Anda</p>
+            </div>
+            <form id="modal-booking-form" onsubmit="submitModalBooking(event)">
+                <div class="modal-grid">
+                    <div class="form-group"><label for="m-nama">Nama Lengkap</label><input type="text" id="m-nama" name="nama" required placeholder="Masukkan nama lengkap Anda"></div>
+                    <div class="form-group"><label for="m-email">Email</label><input type="email" id="m-email" name="email" required placeholder="email@example.com"></div>
+                    <div class="form-group"><label for="m-telepon">No. Telepon / WhatsApp</label><input type="tel" id="m-telepon" name="telepon" required placeholder="+62 8xx xxxx xxxx"></div>
+                    <div class="form-group">
+                        <label for="m-asal">&#128205; Pelabuhan Asal</label>
+                        <select id="m-asal" name="asal" required onchange="updateTujuanByAsal()">
+                            <option value="">Pilih Pelabuhan Asal</option>
+                            <option value="Marina Ancol">Marina Ancol, Jakarta Utara</option>
+                            <option value="Muara Angke">Muara Angke, Jakarta Utara</option>
+                            <option value="Muara Baru">Muara Baru, Jakarta Utara</option>
+                            <option value="Tanjung Priok">Tanjung Priok, Jakarta Utara</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="m-tujuan">&#127965; Tujuan Pulau</label>
+                        <select id="m-tujuan" name="tujuan" required>
+                            <option value="">Pilih Tujuan</option>
+                            <option value="Pulau Tidung">Pulau Tidung</option>
+                            <option value="Pulau Pramuka">Pulau Pramuka</option>
+                            <option value="Pulau Harapan">Pulau Harapan</option>
+                            <option value="Pulau Pari">Pulau Pari</option>
+                            <option value="Pulau Untung Jawa">Pulau Untung Jawa</option>
+                            <option value="Pulau Kelapa">Pulau Kelapa</option>
+                        </select>
+                    </div>
+                    <div class="form-group"><label for="m-tanggal">Tanggal Keberangkatan</label><input type="date" id="m-tanggal" name="tanggal" required></div>
+                    <div class="form-group">
+                        <label for="m-waktu">Waktu Keberangkatan</label>
+                        <select id="m-waktu" name="waktu" required>
+                            <option value="">Pilih Waktu</option>
+                            <option value="07:00">07:00 WIB</option>
+                            <option value="08:00">08:00 WIB</option>
+                            <option value="08:30">08:30 WIB</option>
+                            <option value="09:00">09:00 WIB</option>
+                            <option value="09:30">09:30 WIB</option>
+                            <option value="10:00">10:00 WIB</option>
+                            <option value="11:00">11:00 WIB</option>
+                            <option value="12:00">12:00 WIB</option>
+                            <option value="13:00">13:00 WIB</option>
+                        </select>
+                    </div>
+                    <div class="form-group"><label for="m-jumlah">Jumlah Penumpang</label><input type="number" id="m-jumlah" name="jumlah" min="1" max="10" value="1" required></div>
+                    <div class="form-group">
+                        <label for="m-pembayaran">Metode Pembayaran</label>
+                        <select id="m-pembayaran" name="pembayaran" required onchange="updateModalPaymentInfo()">
+                            <option value="">Pilih Metode Pembayaran</option>
+                            <optgroup label="Transfer Bank"><option value="BCA">BCA</option><option value="Mandiri">Mandiri</option><option value="BNI">BNI</option><option value="BRI">BRI</option></optgroup>
+                            <optgroup label="E-Wallet"><option value="GoPay">GoPay</option><option value="OVO">OVO</option><option value="Dana">DANA</option><option value="ShopeePay">ShopeePay</option><option value="LinkAja">LinkAja</option></optgroup>
+                            <optgroup label="Kartu Kredit/Debit"><option value="Visa">Visa</option><option value="Mastercard">Mastercard</option><option value="JCB">JCB</option></optgroup>
+                            <optgroup label="Lainnya"><option value="QRIS">QRIS</option><option value="Indomaret">Indomaret</option><option value="Alfamart">Alfamart</option></optgroup>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Rute summary -->
+                <div id="rute-summary" style="display:none;"></div>
+
+                <div id="modal-payment-info" class="modal-payment-info" style="display:none;">
+                    <p><strong>&#8505;&#65039; Info Pembayaran:</strong></p>
+                    <p id="modal-payment-details"></p>
+                </div>
+
+                <button type="submit" class="cta-button modal-submit-btn">&#128674; Pesan Sekarang</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- E-TIKET MODAL (shown after booking) -->
+    <div id="etiket-modal" class="modal-overlay" onclick="closeEtiketOnOverlay(event)">
+        <div class="modal-container etiket-modal-container">
+            <button class="modal-close" onclick="closeEtiket()">&times;</button>
+            <div id="etiket-content"></div>
+            <div style="display:flex;gap:1rem;margin-top:1.2rem;">
+                <button class="cta-button" style="flex:1;" onclick="printEtiket()">&#128424; Cetak / Simpan PDF</button>
+                <button class="action-btn" style="flex:1;" onclick="closeEtiket()">Tutup</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script src="features.js"></script>
+    <script src="auth.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

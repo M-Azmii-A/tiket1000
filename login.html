@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login – Tiket1000</title>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="auth.css">
+    <link rel="stylesheet" href="features.css">
+</head>
+<body class="auth-body">
+
+    <div class="auth-bg">
+        <div class="wave"></div>
+        <div class="wave"></div>
+    </div>
+
+    <div class="auth-wrapper">
+
+        <!-- Logo -->
+        <a href="index.html" class="auth-logo">⚓ Tiket1000</a>
+
+        <!-- Role Selector -->
+        <div class="role-selector" id="role-selector">
+            <h2>Selamat Datang</h2>
+            <p>Pilih tipe akun untuk melanjutkan</p>
+
+            <div class="role-grid">
+                <button class="role-card" onclick="selectRole('penumpang')">
+                    <span class="role-icon">🧑‍✈️</span>
+                    <span class="role-name">Penumpang</span>
+                    <span class="role-desc">Pesan tiket & lihat riwayat perjalanan</span>
+                </button>
+                <button class="role-card" onclick="selectRole('admin')">
+                    <span class="role-icon">🛡️</span>
+                    <span class="role-name">Admin</span>
+                    <span class="role-desc">Akses panel manajemen & operasional</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Login Form -->
+        <div class="auth-card" id="auth-card" style="display:none;">
+            <button class="back-btn" onclick="backToRoles()">← Kembali</button>
+
+            <div class="auth-card-header" id="auth-card-header">
+                <!-- filled by JS -->
+            </div>
+
+            <!-- Admin sub-role (only shown for admin) -->
+            <div id="admin-subrole-wrap" style="display:none;">
+                <label class="auth-label">Jabatan Admin</label>
+                <div class="subrole-grid" id="subrole-grid">
+                    <button class="subrole-btn active" data-role="admin_utama" onclick="selectSubrole(this)">
+                        <span>👑</span> Admin Utama
+                    </button>
+                    <button class="subrole-btn" data-role="tiketing" onclick="selectSubrole(this)">
+                        <span>🎫</span> Tiketing
+                    </button>
+                    <button class="subrole-btn" data-role="pemilik_kapal" onclick="selectSubrole(this)">
+                        <span>🚢</span> Pemilik Kapal
+                    </button>
+                    <button class="subrole-btn" data-role="dishub" onclick="selectSubrole(this)">
+                        <span>🏛️</span> Dishub
+                    </button>
+                </div>
+            </div>
+
+            <form id="login-form" onsubmit="submitLogin(event)">
+                <div class="form-group">
+                    <label class="auth-label" for="login-email">Email</label>
+                    <input type="email" id="login-email" required placeholder="email@contoh.com" autocomplete="email">
+                </div>
+                <div class="form-group" style="position:relative;">
+                    <label class="auth-label" for="login-pass">Password</label>
+                    <input type="password" id="login-pass" required placeholder="••••••••" autocomplete="current-password">
+                    <button type="button" class="toggle-pass" onclick="togglePassword()" title="Tampilkan password">👁</button>
+                </div>
+
+                <div class="auth-hint" id="auth-hint"></div>
+
+                <button type="submit" class="cta-button auth-submit-btn" id="login-btn">Masuk</button>
+            </form>
+
+            <p class="auth-footer-text">Belum punya akun? <a href="register.html">Daftar di sini</a></p>
+            <p class="auth-footer-text" style="margin-top:0.5rem;"><a href="forgot-password.html" style="color:#64748b;font-size:0.85rem;">🔑 Lupa Password?</a></p>
+        </div>
+
+    </div>
+
+    <script src="auth.js"></script>
+</body>
+</html>

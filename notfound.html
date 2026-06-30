@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 – Halaman Tidak Ditemukan | Tiket1000</title>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="auth.css">
+    <style>
+        .page-notfound {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 2rem;
+            background: linear-gradient(135deg, var(--ocean-deep) 0%, var(--ocean-medium) 60%, var(--ocean-light) 100%);
+            position: relative;
+            overflow: hidden;
+        }
+        .page-notfound .wave-background { opacity: 0.2; }
+        .error-box {
+            position: relative;
+            z-index: 1;
+            max-width: 520px;
+        }
+        .error-code {
+            font-family: 'Oswald', sans-serif;
+            font-size: 10rem;
+            font-weight: 700;
+            color: transparent;
+            -webkit-text-stroke: 3px rgba(255,255,255,0.4);
+            line-height: 1;
+            margin-bottom: 0;
+            animation: float 4s ease-in-out infinite;
+        }
+        @keyframes float {
+            0%,100% { transform: translateY(0); }
+            50%      { transform: translateY(-14px); }
+        }
+        .error-ship {
+            font-size: 5rem;
+            display: block;
+            margin: -1rem 0 1rem;
+            animation: sway 3s ease-in-out infinite;
+        }
+        @keyframes sway {
+            0%,100% { transform: rotate(-5deg); }
+            50%      { transform: rotate(5deg); }
+        }
+        .error-title {
+            font-family: 'Oswald', sans-serif;
+            font-size: 2rem;
+            color: #fff;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 0.8rem;
+        }
+        .error-desc {
+            color: rgba(255,255,255,0.75);
+            font-size: 1rem;
+            font-weight: 300;
+            margin-bottom: 2.5rem;
+            line-height: 1.6;
+        }
+        .error-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .btn-home {
+            background: linear-gradient(135deg, var(--coral), var(--sunset));
+            color: #fff;
+            padding: 0.9rem 2rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.3s;
+            box-shadow: 0 6px 20px rgba(255,107,107,0.4);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .btn-home:hover { transform: translateY(-3px); box-shadow: 0 10px 28px rgba(255,107,107,0.55); }
+        .btn-back {
+            background: rgba(255,255,255,0.15);
+            color: #fff;
+            padding: 0.9rem 2rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 1rem;
+            border: 1.5px solid rgba(255,255,255,0.35);
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .btn-back:hover { background: rgba(255,255,255,0.25); border-color: #fff; }
+        .countdown-text {
+            margin-top: 2rem;
+            font-size: 0.85rem;
+            color: rgba(255,255,255,0.5);
+        }
+        .countdown-text span { color: var(--sand); font-weight: 600; }
+    </style>
+</head>
+<body>
+    <div class="page-notfound">
+        <div class="wave-background">
+            <div class="wave"></div>
+            <div class="wave"></div>
+        </div>
+        <div class="error-box">
+            <div class="error-code">404</div>
+            <span class="error-ship">⛵</span>
+            <h1 class="error-title">Halaman Tidak Ditemukan</h1>
+            <p class="error-desc">Sepertinya kapal Anda tersesat di lautan.<br>Halaman yang Anda cari tidak ada atau sudah dipindahkan.</p>
+            <div class="error-actions">
+                <a href="index.html" class="btn-home">🏠 Kembali ke Beranda</a>
+                <a href="javascript:history.back()" class="btn-back">← Halaman Sebelumnya</a>
+            </div>
+            <p class="countdown-text">Otomatis kembali dalam <span id="cd">10</span> detik…</p>
+        </div>
+    </div>
+    <script>
+        let t = 10;
+        const cd = document.getElementById('cd');
+        const iv = setInterval(() => {
+            cd.textContent = --t;
+            if (t <= 0) { clearInterval(iv); window.location.href = 'index.html'; }
+        }, 1000);
+    </script>
+</body>
+</html>
