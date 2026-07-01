@@ -57,7 +57,7 @@ const TIKET_AKTIF = [
 function showQRTiket(id) {
   const t = TIKET_AKTIF.find(x => x.id === id);
   if (!t) return;
-  if (t.status !== 'terkonfirmasi') { toast('Selesaikan pembayaran terlebih dahulu!', 'error'); return; }
+  if (t.status !== 'terkonfirmasi') { toast(t.status==='ditolak' ? 'Pembayaran tiket ini ditolak!' : 'Tiket masih menunggu konfirmasi petugas tiketing!', 'error'); return; }
 
   const qrData = JSON.stringify({
     tiket: t.id, nama: t.nama, asal: t.asal, tujuan: t.tujuan,
@@ -370,11 +370,11 @@ function showPenumpangHome(session) {
               <td>${t.jam} WIB</td>
               <td>${t.jml} org</td>
               <td>${t.bayar}</td>
-              <td>${t.status==='terkonfirmasi'?badge('Terkonfirmasi','green'):badge('Menunggu Bayar','yellow')}</td>
+              <td>${t.status==='terkonfirmasi' ? badge('Terkonfirmasi','green') : t.status==='ditolak' ? badge('Ditolak','red') : badge('Menunggu Konfirmasi','yellow')}</td>
               <td>
                 ${t.status==='terkonfirmasi'
                   ? `<button class="qr-btn" onclick="event.stopPropagation();showQRTiket('${t.id}')" title="Lihat QR Code">🔲</button>`
-                  : `<button class="qr-btn qr-btn-disabled" disabled title="Selesaikan pembayaran dulu">🔒</button>`}
+                  : `<button class="qr-btn qr-btn-disabled" disabled title="${t.status==='ditolak'?'Pembayaran ditolak':'Menunggu konfirmasi petugas'}">🔒</button>`}
               </td>
             </tr>`).join('')}
           </tbody>
@@ -508,6 +508,17 @@ function submitPesanTiket(e) {
   const tglFmt  = new Date(tgl).toLocaleDateString('id-ID',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
   const jam     = DB.jadwal.find(j=>j.tujuan===tujuan)?.jam || '08:00';
 
+  // ── Tiket baru WAJIB berstatus pending sampai dikonfirmasi petugas tiketing ──
+  const tiketBaru = {
+    id: noTiket, nama, asal, tujuan, tgl: tglFmt, jam,
+    jml: parseInt(jml), bayar, total, status: 'pending'
+  };
+  DB.tiket.unshift(tiketBaru);
+  TIKET_AKTIF.unshift({
+    id: noTiket, nama, asal, tujuan, tgl: tglFmt, jam,
+    jml: parseInt(jml), bayar, total, status: 'pending'
+  });
+
   openDashModal(`
     <button class="modal-close" onclick="closeDashModal()">&times;</button>
     <div class="etiket-wrapper" id="dash-etiket-print">
@@ -536,8 +547,8 @@ function submitPesanTiket(e) {
           <div class="etiket-info-item"><span class="etiket-info-label">📧 Email</span><span class="etiket-info-val" style="font-size:0.78rem;">${email}</span></div>
         </div>
         <div class="etiket-qr-section">
-          <div id="dash-qr-canvas"></div>
-          <p class="etiket-qr-label">Scan untuk verifikasi</p>
+          <div style="width:120px;height:120px;display:flex;align-items:center;justify-content:center;font-size:2.8rem;">🔒</div>
+          <p class="etiket-qr-label">QR terkunci hingga<br>pembayaran dikonfirmasi</p>
           <p class="etiket-qr-no">${noTiket}</p>
         </div>
       </div>
@@ -547,30 +558,21 @@ function submitPesanTiket(e) {
         <div><span class="etiket-footer-label">Jumlah</span><span class="etiket-footer-val">${jml}×</span></div>
         <div class="etiket-total-box"><span class="etiket-footer-label">TOTAL BAYAR</span><span class="etiket-total-val">${rupiah(total)}</span></div>
       </div>
-      <div class="etiket-status-bar">
-        <span class="etiket-status-badge">✅ TIKET TERKONFIRMASI</span>
-        <span style="font-size:0.78rem;color:#64748b;">Dikirim ke ${email}</span>
+      <div class="etiket-status-bar" style="background:linear-gradient(90deg,#fffbeb,#fef3c7);">
+        <span class="etiket-status-badge" style="background:#f59e0b;">⏳ MENUNGGU KONFIRMASI PEMBAYARAN</span>
+        <span style="font-size:0.78rem;color:#64748b;">Info dikirim ke ${email}</span>
       </div>
     </div>
+    <p style="font-size:0.82rem;color:#64748b;margin-top:0.8rem;text-align:center;">
+      Tiket Anda akan aktif dan QR Code dapat dilihat setelah petugas tiketing memverifikasi pembayaran Anda.
+      Pantau statusnya di menu <strong>Riwayat Perjalanan</strong>.
+    </p>
     <div style="display:flex;gap:1rem;margin-top:1rem;">
-      <button class="cta-button" style="flex:1;" onclick="printDashEtiket()">🖨️ Cetak / Simpan PDF</button>
+      <button class="action-btn primary" style="flex:1;" onclick="closeDashModal();showRiwayat()">📋 Lihat Status Pemesanan</button>
       <button class="action-btn" style="flex:1;" onclick="closeDashModal();showPenumpangHome(getSession())">Selesai</button>
     </div>`);
-
-  // Generate QR
-  setTimeout(() => {
-    const qrEl = document.getElementById('dash-qr-canvas');
-    if (qrEl && typeof QRCode !== 'undefined') {
-      qrEl.innerHTML = '';
-      new QRCode(qrEl, {
-        text: JSON.stringify({ tiket:noTiket, nama, asal, tujuan, tgl, jam, jml, bayar, total }),
-        width: 120, height: 120,
-        colorDark: '#0A2463', colorLight: '#FFFFFF',
-        correctLevel: QRCode.CorrectLevel.H,
-      });
-    }
-  }, 200);
 }
+
 
 function showRiwayat() {
   setTitle('Riwayat Perjalanan');
@@ -652,11 +654,11 @@ function showETiket() {
       </div>
 
       ${pending.length > 0 ? `
-      <h3 style="margin-top:2rem;">⏳ Menunggu Pembayaran</h3>
+      <h3 style="margin-top:2rem;">⏳ Menunggu Konfirmasi Petugas</h3>
       <div class="etiket-grid">
         ${pending.map(t=>`
           <div class="etiket-box" style="opacity:0.7;">
-            <div class="etiket-header" style="background:linear-gradient(135deg,#475569,#64748b);">
+            <div class="etiket-header" style="background:linear-gradient(135deg,${t.status==='ditolak'?'#991b1b,#dc2626':'#475569,#64748b'});">
               <span>⚓ TIKET1000</span><span class="etiket-no">${t.id}</span>
             </div>
             <div class="etiket-body">
@@ -666,7 +668,7 @@ function showETiket() {
               <div class="etiket-row"><span>🕐 Jam</span><strong>${t.jam} WIB</strong></div>
               <div class="etiket-row total"><span>💰 Total</span><strong>${rupiah(t.total)}</strong></div>
             </div>
-            <div class="etiket-footer">${badge('⏳ Menunggu Bayar','yellow')} &nbsp; <small>🔒 QR terkunci</small></div>
+            <div class="etiket-footer">${t.status==='ditolak' ? badge('❌ Ditolak','red') : badge('⏳ Menunggu Konfirmasi','yellow')} &nbsp; <small>🔒 QR terkunci</small></div>
           </div>`).join('')}
       </div>` : ''}
     </div>`);
@@ -676,24 +678,79 @@ function showETiket() {
 function lihatETiketById(id) {
   const t = DB.tiket.find(x=>x.id===id);
   if (!t) return;
+
+  const isLunas   = t.status === 'lunas';
+  const isPending = t.status === 'pending';
+  const isRefund  = t.status === 'refund';
+
+  const qrData = JSON.stringify({
+    tiket: t.id, nama: t.nama, tujuan: t.tujuan, tgl: t.tgl,
+    jam: t.jam, jml: t.jml, bayar: t.bayar, total: t.total,
+    verified: true
+  });
+
   openDashModal(`
     <button class="modal-close" onclick="closeDashModal()">&times;</button>
     <div class="modal-header"><div class="modal-icon-wrap">🎫</div><h3>Detail E-Tiket</h3></div>
     <div class="etiket-box">
       <div class="etiket-header"><span>⚓ TIKET1000</span><span class="etiket-no">${t.id}</span></div>
-      <div class="etiket-body">
-        <div class="etiket-row"><span>Penumpang</span><strong>${t.nama}</strong></div>
-        <div class="etiket-row"><span>Tujuan</span><strong>${t.tujuan}</strong></div>
-        <div class="etiket-row"><span>Tanggal</span><strong>${t.tgl}</strong></div>
-        <div class="etiket-row"><span>Jam</span><strong>${t.jam} WIB</strong></div>
-        <div class="etiket-row"><span>Penumpang</span><strong>${t.jml} orang</strong></div>
-        <div class="etiket-row"><span>Pembayaran</span><strong>${t.bayar}</strong></div>
-        <div class="etiket-row total"><span>Total</span><strong style="color:var(--coral);font-size:1.2rem;">${rupiah(t.total)}</strong></div>
+      <div class="etiket-body" style="display:flex;gap:1.2rem;align-items:flex-start;flex-wrap:wrap;">
+        <div style="flex:1;min-width:180px;">
+          <div class="etiket-row"><span>Penumpang</span><strong>${t.nama}</strong></div>
+          <div class="etiket-row"><span>Tujuan</span><strong>${t.tujuan}</strong></div>
+          <div class="etiket-row"><span>Tanggal</span><strong>${t.tgl}</strong></div>
+          <div class="etiket-row"><span>Jam</span><strong>${t.jam} WIB</strong></div>
+          <div class="etiket-row"><span>Penumpang</span><strong>${t.jml} orang</strong></div>
+          <div class="etiket-row"><span>Pembayaran</span><strong>${t.bayar}</strong></div>
+          <div class="etiket-row total"><span>Total</span><strong style="color:var(--coral);font-size:1.2rem;">${rupiah(t.total)}</strong></div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:0.5rem;background:#f8fafc;border:1.5px solid #e2e8f0;border-radius:14px;padding:1rem;min-width:150px;">
+          ${isLunas ? `
+            <div id="riwayat-qr-canvas"></div>
+            <p style="font-size:0.7rem;color:#64748b;text-align:center;margin:0;">Tunjukkan QR ini di dermaga</p>
+          ` : isPending ? `
+            <div style="width:120px;height:120px;display:flex;align-items:center;justify-content:center;background:#f1f5f9;border-radius:10px;font-size:2.5rem;">🔒</div>
+            <p style="font-size:0.72rem;color:#b45309;text-align:center;margin:0;font-weight:600;">⏳ Menunggu Konfirmasi<br>Pembayaran</p>
+          ` : isRefund ? `
+            <div style="width:120px;height:120px;display:flex;align-items:center;justify-content:center;background:#fee2e2;border-radius:10px;font-size:2.5rem;">↩️</div>
+            <p style="font-size:0.72rem;color:#b30000;text-align:center;margin:0;font-weight:600;">Tiket Direfund<br>QR Tidak Berlaku</p>
+          ` : `
+            <div style="width:120px;height:120px;display:flex;align-items:center;justify-content:center;background:#f1f5f9;border-radius:10px;font-size:2.5rem;">❌</div>
+            <p style="font-size:0.72rem;color:#64748b;text-align:center;margin:0;">QR tidak tersedia</p>
+          `}
+        </div>
       </div>
-      <div class="etiket-footer">${statusBadge(t.status)}</div>
+      <div class="etiket-footer">${statusBadge(t.status)}
+        ${isPending ? '<br><small style="color:#b45309;">Petugas tiketing akan memverifikasi pembayaran Anda</small>' : ''}
+      </div>
     </div>
-    <button class="cta-button" style="width:100%;margin-top:1rem;" onclick="closeDashModal()">Tutup</button>`);
+    <div style="display:flex;gap:1rem;margin-top:1rem;">
+      ${isLunas ? `<button class="action-btn primary" style="flex:1;" onclick="printRiwayatEtiket('${t.id}')">🖨️ Cetak</button>` : ''}
+      <button class="action-btn" style="flex:1;" onclick="closeDashModal()">Tutup</button>
+    </div>`);
+
+  if (isLunas) {
+    setTimeout(() => {
+      const el = document.getElementById('riwayat-qr-canvas');
+      if (el && typeof QRCode !== 'undefined') {
+        el.innerHTML = '';
+        new QRCode(el, {
+          text: qrData, width: 120, height: 120,
+          colorDark: '#0A2463', colorLight: '#FFFFFF',
+          correctLevel: QRCode.CorrectLevel.H,
+        });
+      }
+    }, 150);
+  }
 }
+
+function printRiwayatEtiket(id) {
+  const t = DB.tiket.find(x=>x.id===id);
+  if (!t) return;
+  toast('🖨️ Menyiapkan cetak tiket ' + t.id + '…');
+  setTimeout(() => window.print(), 300);
+}
+
 
 function showRefund() {
   setTitle('Ajukan Refund');
@@ -1103,7 +1160,14 @@ function exportTransaksi() {
   const a = document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='transaksi_tiket1000.csv'; a.click();
   toast('📥 File CSV berhasil diunduh!');
 }
-function verifikasiPembayaran(id) { toast(`✅ Pembayaran ${id} berhasil diverifikasi!`); setTimeout(showSemuaTransaksi, 1000); }
+function verifikasiPembayaran(id) {
+  const t = DB.tiket.find(x=>x.id===id);
+  if (t) t.status = 'lunas';
+  const ta = TIKET_AKTIF.find(x=>x.id===id);
+  if (ta) ta.status = 'terkonfirmasi';
+  toast(`✅ Pembayaran ${id} berhasil diverifikasi! Tiket aktif & QR Code tersedia.`);
+  setTimeout(showSemuaTransaksi, 1000);
+}
 
 function showLaporanStatistik() {
   setTitle('Laporan & Statistik');
@@ -1431,12 +1495,15 @@ function showVerifikasiPembayaran() {
 function konfirmasiVerif(id, nama) {
   const t = DB.tiket.find(x=>x.id===id);
   if(t) t.status='lunas';
-  toast(`✅ Pembayaran ${id} (${nama}) berhasil dikonfirmasi!`);
+  const ta = TIKET_AKTIF.find(x=>x.id===id);
+  if(ta) ta.status='terkonfirmasi';
+  toast(`✅ Pembayaran ${id} (${nama}) berhasil dikonfirmasi! QR Code kini aktif.`);
   setTimeout(showVerifikasiPembayaran, 800);
 }
 function tolakVerif(id) {
   if(confirm(`Tolak pembayaran ${id}? Tiket akan dibatalkan.`)) {
     const t = DB.tiket.find(x=>x.id===id); if(t) t.status='refund';
+    const ta = TIKET_AKTIF.find(x=>x.id===id); if(ta) ta.status='ditolak';
     toast(`❌ Pembayaran ${id} ditolak.`,'error');
     setTimeout(showVerifikasiPembayaran, 800);
   }
