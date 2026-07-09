@@ -41,9 +41,28 @@
                 </div>
                 <div class="form-group" style="position:relative;">
                     <label class="auth-label" for="reg-pass">Password</label>
-                    <input type="password" id="reg-pass" required placeholder="Min. 8 karakter">
+                    <input type="password" id="reg-pass" required placeholder="Contoh: Tiket@2026"
+                        oninput="checkPasswordStrength('reg-pass')">
                     <button type="button" class="toggle-pass" onclick="togglePasswordReg()" title="Tampilkan password">👁</button>
                 </div>
+
+                <!-- Strength bar -->
+                <div class="pass-strength-wrap" id="pass-strength-wrap" style="display:none;margin-bottom:0.5rem;">
+                    <div class="pass-strength-bar">
+                        <div class="pass-strength-fill" id="pass-strength-fill"></div>
+                    </div>
+                    <span class="pass-strength-label" id="pass-strength-label"></span>
+                </div>
+
+                <!-- Requirement checklist -->
+                <ul class="pass-requirements" id="pass-req" style="margin-bottom:1rem;">
+                    <li id="req-len">  <span class="req-icon">○</span> Minimal 8 karakter</li>
+                    <li id="req-lower"><span class="req-icon">○</span> Huruf kecil (a-z)</li>
+                    <li id="req-upper"><span class="req-icon">○</span> Huruf besar (A-Z)</li>
+                    <li id="req-num">  <span class="req-icon">○</span> Angka (0-9)</li>
+                    <li id="req-sym">  <span class="req-icon">○</span> Karakter khusus (!@#$...)</li>
+                </ul>
+
                 <div class="form-group">
                     <label class="auth-label" for="reg-pass2">Konfirmasi Password</label>
                     <input type="password" id="reg-pass2" required placeholder="Ulangi password">
