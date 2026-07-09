@@ -833,9 +833,25 @@ function showProfil(session) {
           <hr style="border:none;border-top:1px solid #e2e8f0;margin:1.2rem 0;">
           <h3>🔒 Ganti Password</h3>
           <div class="form-group"><label>Password Lama</label><input type="password" id="ep-pass-old" placeholder="••••••••"></div>
-          <div class="form-row-2">
-            <div class="form-group"><label>Password Baru</label><input type="password" id="ep-pass-new" placeholder="Min. 8 karakter"></div>
-            <div class="form-group"><label>Konfirmasi</label><input type="password" id="ep-pass-conf" placeholder="Ulangi password baru"></div>
+          <div class="form-group">
+            <label>Password Baru</label>
+            <input type="password" id="ep-pass-new" placeholder="Contoh: Tiket@2026"
+              oninput="checkPasswordStrength('ep-pass-new')">
+          </div>
+          <div class="pass-strength-wrap" id="pass-strength-wrap" style="display:none;margin-bottom:0.4rem;">
+            <div class="pass-strength-bar"><div class="pass-strength-fill" id="pass-strength-fill"></div></div>
+            <span class="pass-strength-label" id="pass-strength-label"></span>
+          </div>
+          <ul class="pass-requirements" style="margin-bottom:0.8rem;">
+            <li id="req-len">  <span class="req-icon">○</span> Minimal 8 karakter</li>
+            <li id="req-lower"><span class="req-icon">○</span> Huruf kecil (a-z)</li>
+            <li id="req-upper"><span class="req-icon">○</span> Huruf besar (A-Z)</li>
+            <li id="req-num">  <span class="req-icon">○</span> Angka (0-9)</li>
+            <li id="req-sym">  <span class="req-icon">○</span> Karakter khusus (!@#$...)</li>
+          </ul>
+          <div class="form-group">
+            <label>Konfirmasi Password Baru</label>
+            <input type="password" id="ep-pass-conf" placeholder="Ulangi password baru">
           </div>
           <button type="submit" class="action-btn primary" style="width:100%;padding:0.9rem;">💾 Simpan Perubahan</button>
         </form>
@@ -850,7 +866,11 @@ function submitEditProfil(e) {
   const passO = document.getElementById('ep-pass-old').value;
   const passN = document.getElementById('ep-pass-new').value;
   const passC = document.getElementById('ep-pass-conf').value;
-  if (passN && passN !== passC) { toast('Konfirmasi password baru tidak cocok!','error'); return; }
+  if (passN) {
+    const passErr = typeof validatePassword === 'function' ? validatePassword(passN) : null;
+    if (passErr) { toast(passErr, 'error'); return; }
+    if (passN !== passC) { toast('Konfirmasi password baru tidak cocok!', 'error'); return; }
+  }
   const s = getSession();
   s.nama = nama;
   setSession(s);
